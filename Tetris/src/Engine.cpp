@@ -1,6 +1,7 @@
 #include "Engine.h"
 
 #include <stdexcept>
+#include <string>
 
 namespace Tetris
 {
@@ -10,6 +11,10 @@ namespace Tetris
 		if (SDL_Init(SDL_INIT_VIDEO) < 0)
 		{
 			throw std::runtime_error("Could not initialize sdl2.");
+		}
+		if (TTF_Init() == -1)
+		{
+			throw std::runtime_error("Could not initialize sdl2_ttf.");
 		}
 
 		m_win = SDL_CreateWindow(
@@ -119,8 +124,29 @@ namespace Tetris
 		drawBoard();
 		drawPiece();
 		drawBoundaries();
+		drawScore();
 
 		SDL_RenderPresent(m_renderer);
+	}
+	
+	// temporary
+	void Engine::drawScore()
+	{
+		TTF_Font* font = TTF_OpenFont("res/roboto.ttf", 128);
+		SDL_Surface* msg = TTF_RenderText_Solid(font, std::to_string(m_game.getScore()).c_str(), { 255, 255, 255, 255 });
+		SDL_Texture* text = SDL_CreateTextureFromSurface(m_renderer, msg);
+
+		SDL_Rect rect;
+		rect.x = 0;
+		rect.y = 0;
+		rect.w = std::to_string(m_game.getScore()).size() * 16;
+		rect.h = 32;
+
+		SDL_RenderCopy(m_renderer, text, NULL, &rect);
+
+		SDL_DestroyTexture(text);
+		SDL_FreeSurface(msg);
+		TTF_CloseFont(font);
 	}
 
 	void Engine::drawBoard()

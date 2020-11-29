@@ -68,8 +68,10 @@ namespace Tetris
 		return out;
 	}
 
-	void Tetris::clearLines()
+	int Tetris::clearLines()
 	{
+		int sum = 0;
+
 		for (int i = 0; i < BOARD_SIZE.y; ++i)
 		{
 			bool isFull = true;
@@ -88,6 +90,7 @@ namespace Tetris
 				{
 					setBoardCell({j, i}, 0);
 				}
+				sum += m_scoreIncrement;
 			}
 			else
 			{
@@ -114,6 +117,8 @@ namespace Tetris
 				}
 			}
 		}
+		
+		return sum;
 	}
 
 	bool Tetris::update()
@@ -129,7 +134,7 @@ namespace Tetris
 			else
 			{
 				translate();
-				clearLines();
+				m_score += clearLines();
 				m_currentPiece = genPiece();
 				if (!fits(m_currentPiece))
 				{

@@ -3,6 +3,7 @@
 
 #include "Tetris.h"
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 
 namespace Tetris
 {
@@ -34,6 +35,7 @@ namespace Tetris
 		void drawBoundaries();
 		void drawBoard();
 		void drawPiece();
+		void drawScore();
 
 		void handleEvents();
 	};
